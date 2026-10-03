@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import useStore from "./store";
-import PostDetails from "./PostDetails";
 
 function Home() {
   const { posts, users, setPosts, setUsers } = useStore();
   const [search, setSearch] = useState("");
-  const [selectedPost, setSelectedPost] = useState(null);
 
   useEffect(() => {
     fetch("https://jsonplaceholder.typicode.com/posts")
@@ -16,15 +14,6 @@ function Home() {
       .then((response) => response.json())
       .then((data) => setUsers(data));
   }, [setPosts, setUsers]);
-
-  if (selectedPost) {
-    return (
-      <PostDetails
-        postId={selectedPost}
-        goBack={() => setSelectedPost(null)}
-      />
-    );
-  }
 
   return (
     <div>
@@ -47,11 +36,7 @@ function Home() {
           const user = users.find((user) => user.id === post.userId);
 
           return (
-            <div
-              key={post.id}
-              onClick={() => setSelectedPost(post.id)}
-              style={{ cursor: "pointer" }}
-            >
+            <div key={post.id}>
               <h2>{post.title}</h2>
               <p>{post.body}</p>
               <p>Author: {user?.name}</p>
